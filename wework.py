@@ -44,8 +44,11 @@ class Wework:
         print(r.text)
         assert r.status_code == 200
         assert r.json()['errcode'] == 0
-        tag_id = [tag for group in r.json()['tag_group'] for tag in group['tag'] if tag['name'] == name][0]['id']
-        return tag_id
+        tags = [tag for group in r.json()['tag_group'] for tag in group['tag'] if tag['name'] == name]
+        if len(tags) == 0:
+            return None
+        else:
+            return tags[0]['id']
 
     def tag_delete(self, tag_id):
         return requests.post(
